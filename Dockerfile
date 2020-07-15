@@ -89,7 +89,12 @@ deluser php                                                                     
 adduser -h /phphome -s /bin/sh -D -H -u 1971 php                                               && \
 mkdir -p /usr/share/drush/commands /phphome drush10                                            && \
 chown php.php /phphome drush10                                                                 && \
-su - php -c "cd /usr/local/drush10 && composer require drush/drush:10.*"                       && \
+su - php -c "cd /usr/local/drush10 && composer require                                            \
+  'drush/drush:10.*' 'composer/semver:^1.0' 'pear/archive_tar:^1.4.9' 'psr/log:^1.0'              \
+  'symfony/console:~2.7|^3' 'symfony/debug:~2.8|~3.0' 'symfony/event-dispatcher:~2.7|^3'          \
+  'symfony/filesystem:^2.7 || ^3.4' 'symfony/finder:~2.7|^3' 'symfony/http-foundation:~3.4.35'    \
+  'symfony/process:~2.7|^3' 'symfony/var-dumper:~2.7|^3' 'symfony/yaml:~2.3|^3'                   \
+  'twig/twig:^1.38.2'"                                                                         && \
 ln -s /usr/local/drush10/vendor/drush/drush/drush /usr/local/bin/drush                         && \
 
 
