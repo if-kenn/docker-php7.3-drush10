@@ -1,7 +1,7 @@
 FROM alpine:3.10
 MAINTAINER IF Fulcrum "fulcrum@ifsight.net"
 
-ENV BUILDDATE 202102040402
+ENV BUILDDATE 202102101623
 
 ADD healthcheck.sh /healthcheck.sh
 
@@ -26,8 +26,7 @@ PHPVER=$PHPV0.$PHPV1.$PHPV2                                                     
 echo "################## [$(date)] PHP Version $PHPVER ##################"                     && \
 echo "################## [$(date)] Add Packages ##################"                            && \
 apk update --no-cache && apk upgrade --no-cache                                                && \
-apk add --no-cache curl-dev fcgi mysql-client postfix                                          && \
-apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community gnu-libiconv && \
+apk add --no-cache curl-dev fcgi mysql-client postfix gnu-libiconv=1.15-r2                     && \
 apk add --no-cache --virtual gen-deps alpine-sdk autoconf binutils libbz2 libpcre16 libpcre32     \
   libpcrecpp m4 pcre-dev pcre2 pcre2-dev perl                                                  && \
 echo "################## [$(date)] Setup PHP $PHPVER build environment ##################"     && \
@@ -35,7 +34,7 @@ adduser -D abuild -G abuild -s /bin/sh                                          
 mkdir -p /var/cache/distfiles                                                                  && \
 chmod a+w /var/cache/distfiles                                                                 && \
 echo "abuild ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/abuild                                  && \
-su - abuild -c "git clone -v --depth 1 --single-branch --branch $ALPINE_VER-stable https://github.com/alpinelinux/aports.git aports"                 && \
+su - abuild -c "git clone -v --depth 1 --single-branch --branch $ALPINE_VER-stable https://github.com/alpinelinux/aports.git aports" && \
 su - abuild -c "cd aports && git checkout $ALPINE_VER-stable"                                  && \
 su - abuild -c "cd aports && git pull"                                                         && \
 su - abuild -c "cd aports/community/php$PHPV0 && abuild -r deps"                               && \
